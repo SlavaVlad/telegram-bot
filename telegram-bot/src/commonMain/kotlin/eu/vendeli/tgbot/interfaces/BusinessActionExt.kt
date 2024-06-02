@@ -17,7 +17,12 @@ interface BusinessActionExt<ReturnType> : Request<ReturnType> {
      * @param businessConnectionId Identifier of the inline message
      * @param via Instance of the bot through which the request will be made.
      */
-    suspend fun sendBusiness(businessConnectionId: String, via: TelegramBot) {
+    suspend fun sendBusiness(
+        businessConnectionId: String,
+        chatId: Long,
+        via: TelegramBot,
+    ) {
+        parameters["chat_id"] = chatId.toJsonElement()
         parameters["business_connection_id"] = businessConnectionId.toJsonElement()
         doRequest(via)
     }
@@ -30,8 +35,10 @@ interface BusinessActionExt<ReturnType> : Request<ReturnType> {
      */
     suspend fun sendBusinessAsync(
         businessConnectionId: String,
+        chatId: Long,
         via: TelegramBot,
     ): Deferred<Response<out ReturnType>> {
+        parameters["chat_id"] = chatId.toJsonElement()
         parameters["business_connection_id"] = businessConnectionId.toJsonElement()
         return doRequestAsync(via)
     }
